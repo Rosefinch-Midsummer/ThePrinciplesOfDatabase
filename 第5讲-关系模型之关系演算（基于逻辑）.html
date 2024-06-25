@@ -1,0 +1,279 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>第5讲-关系模型之关系演算（基于逻辑） - 数据库原理</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="前言.html"><strong aria-hidden="true">1.</strong> 前言</a></li><li class="chapter-item expanded affix "><li class="part-title">HIT 数据库系统</li><li class="chapter-item expanded "><a href="课程概述.html"><strong aria-hidden="true">2.</strong> 课程概述</a></li><li class="chapter-item expanded "><a href="第1讲-初步认识数据库系统.html"><strong aria-hidden="true">3.</strong> 第1讲-初步认识数据库系统</a></li><li class="chapter-item expanded "><a href="第2讲-数据库系统的结构抽象与演变.html"><strong aria-hidden="true">4.</strong> 第2讲-数据库系统的结构抽象与演变</a></li><li class="chapter-item expanded "><a href="第3讲-关系模型之基本概念.html"><strong aria-hidden="true">5.</strong> 第3讲-关系模型之基本概念</a></li><li class="chapter-item expanded "><a href="第4讲-关系模型之关系代数（基于集合）.html"><strong aria-hidden="true">6.</strong> 第4讲-关系模型之关系代数（基于集合）</a></li><li class="chapter-item expanded "><a href="第5讲-关系模型之关系演算（基于逻辑）.html" class="active"><strong aria-hidden="true">7.</strong> 第5讲-关系模型之关系演算（基于逻辑）</a></li><li class="chapter-item expanded "><a href="第6讲-SQL语言之概述.html"><strong aria-hidden="true">8.</strong> 第6讲-SQL语言之概述</a></li><li class="chapter-item expanded "><a href="第7讲-SQL语言之复杂查询与视图.html"><strong aria-hidden="true">9.</strong> 第7讲-SQL语言之复杂查询与视图</a></li><li class="chapter-item expanded "><a href="第8讲-SQL语言与数据库完整性和安全性.html"><strong aria-hidden="true">10.</strong> 第8讲-SQL语言与数据库完整性和安全性</a></li><li class="chapter-item expanded "><a href="第9讲-嵌入式SQL语言之基本技巧.html"><strong aria-hidden="true">11.</strong> 第9讲-嵌入式SQL语言之基本技巧</a></li><li class="chapter-item expanded "><a href="第10讲-嵌入式SQL语言之动态SQL.html"><strong aria-hidden="true">12.</strong> 第10讲-嵌入式SQL语言之动态SQL</a></li><li class="chapter-item expanded "><a href="第11讲-数据建模：思想与方法(暨数据库设计之抽象与表达方法).html"><strong aria-hidden="true">13.</strong> 第11讲-数据建模：思想与方法(暨数据库设计之抽象与表达方法)</a></li><li class="chapter-item expanded "><a href="第12讲-数据建模：工程化方法及案例分析.html"><strong aria-hidden="true">14.</strong> 第12讲-数据建模：工程化方法及案例分析</a></li><li class="chapter-item expanded "><a href="第13讲-数据库设计过程.html"><strong aria-hidden="true">15.</strong> 第13讲-数据库设计过程</a></li><li class="chapter-item expanded "><a href="第14讲-函数依赖及其公理定理.html"><strong aria-hidden="true">16.</strong> 第14讲-函数依赖及其公理定理</a></li><li class="chapter-item expanded "><a href="第15讲-关系模式设计之规范形式.html"><strong aria-hidden="true">17.</strong> 第15讲-关系模式设计之规范形式</a></li><li class="chapter-item expanded "><a href="第16讲-模式分解存在什么问题.html"><strong aria-hidden="true">18.</strong> 第16讲-模式分解存在什么问题</a></li><li class="chapter-item expanded "><a href="第17讲-数据库物理存储.html"><strong aria-hidden="true">19.</strong> 第17讲-数据库物理存储</a></li><li class="chapter-item expanded "><a href="第18讲-数据库索引技术.html"><strong aria-hidden="true">20.</strong> 第18讲-数据库索引技术</a></li><li class="chapter-item expanded "><a href="第19讲-数据库查询实现算法之一趟扫描算法.html"><strong aria-hidden="true">21.</strong> 第19讲-数据库查询实现算法之一趟扫描算法</a></li><li class="chapter-item expanded "><a href="第20讲-数据库查询实现算法之两趟扫描算法.html"><strong aria-hidden="true">22.</strong> 第20讲-数据库查询实现算法之两趟扫描算法</a></li><li class="chapter-item expanded "><a href="第21讲-数据库查询优化技术.html"><strong aria-hidden="true">23.</strong> 第21讲-数据库查询优化技术</a></li><li class="chapter-item expanded "><a href="第22讲-数据库事务处理技术之并发控制.html"><strong aria-hidden="true">24.</strong> 第22讲-数据库事务处理技术之并发控制</a></li><li class="chapter-item expanded "><a href="第23讲-数据库事务处理技术之故障恢复.html"><strong aria-hidden="true">25.</strong> 第23讲-数据库事务处理技术之故障恢复</a></li><li class="chapter-item expanded affix "><li class="part-title">附加内容</li><li class="chapter-item expanded "><a href="存储过程.html"><strong aria-hidden="true">26.</strong> 存储过程</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">数据库原理</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="第5讲-关系模型之关系演算--基于逻辑"><a class="header" href="#第5讲-关系模型之关系演算--基于逻辑">第5讲 关系模型之关系演算  （基于逻辑）</a></h1>
+<h2 id="500-本讲学习什么1分47秒及第5讲教学课件pdf"><a class="header" href="#500-本讲学习什么1分47秒及第5讲教学课件pdf">500-本讲学习什么（1分47秒）及第5讲教学课件PDF</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240316163204.png" alt="" /></p>
+<h2 id="501-什么是关系元组演算6分44秒"><a class="header" href="#501-什么是关系元组演算6分44秒">501-什么是关系元组演算（6分44秒）</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240316164342.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240316164435.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240316164458.png" alt="" /></p>
+<p>其中 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span></span></span></span> 是比较运算符</p>
+<h2 id="502-简单运用元组演算公式9分17秒"><a class="header" href="#502-简单运用元组演算公式9分17秒">502-简单运用元组演算公式（9分17秒）</a></h2>
+<p>（1）元组演算公式之原子公式</p>
+<p>（2）元组演算公式之与、或、非运算符</p>
+<p>（3）注意运算符之次序及语义正确性</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240316170636.png" alt="" /></p>
+<h2 id="503-存在量词与全称量词17分17秒"><a class="header" href="#503-存在量词与全称量词17分17秒">503-存在量词与全称量词（17分17秒）</a></h2>
+<p>元组变量t前有存在量词或全称量词，则该变量被称为“约束变量”，否则被称为“自由变量”。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240316185712.png" alt="" /></p>
+<p>战老师认为这两个公式含义有所不同。</p>
+<h2 id="504-等价变换8分40秒"><a class="header" href="#504-等价变换8分40秒">504-等价变换（8分40秒）</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240317155051.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240317155120.png" alt="" /></p>
+<p>注意：判断未学过某门课程需要遍历所有相关的课程</p>
+<h2 id="505-四个典型示例12分39秒"><a class="header" href="#505-四个典型示例12分39秒">505-四个典型示例（12分39秒）</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240317162116.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240317162140.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240317162201.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240317162220.png" alt="" /></p>
+<h2 id="506-用元组演算实现关系代数操作4分35秒"><a class="header" href="#506-用元组演算实现关系代数操作4分35秒">506-用元组演算实现关系代数操作（4分35秒）</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240317162742.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240317162802.png" alt="" /></p>
+<h2 id="507-什么是域演算7分58秒"><a class="header" href="#507-什么是域演算7分58秒">507-什么是域演算（7分58秒）</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240317165123.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240317165145.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240317165207.png" alt="" /></p>
+<h2 id="508-什么是按示例查询-qbe12分54秒"><a class="header" href="#508-什么是按示例查询-qbe12分54秒">508-什么是按示例查询-QBE（12分54秒）</a></h2>
+<p>QBE：Query By Example</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240317170037.png" alt="" /></p>
+<h2 id="509-qbe应用训练10分52秒"><a class="header" href="#509-qbe应用训练10分52秒">509-QBE应用训练（10分52秒）</a></h2>
+<h2 id="510-关系演算的安全性7分06秒"><a class="header" href="#510-关系演算的安全性7分06秒">510-关系演算的安全性（7分06秒）</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240317170849.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240317170923.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240317170951.png" alt="" /></p>
+<h2 id="511-三种关系运算之比较6分21秒"><a class="header" href="#511-三种关系运算之比较6分21秒">511-三种关系运算之比较（6分21秒）</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240317171038.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240317171100.png" alt="" /></p>
+<p>数据库语言可以基于这三种抽象运算来设计</p>
+<ul>
+<li>用“键盘符号”来替换抽象的数学符号</li>
+<li>用易于理解的符号组合来表达抽象的数学符号</li>
+</ul>
+<h2 id="第5讲模拟练习题"><a class="header" href="#第5讲模拟练习题">第5讲模拟练习题</a></h2>
+<p>安全的元组演算公式和安全的域演算公式可以等价变换。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="第4讲-关系模型之关系代数（基于集合）.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="第6讲-SQL语言之概述.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="第4讲-关系模型之关系代数（基于集合）.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="第6讲-SQL语言之概述.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

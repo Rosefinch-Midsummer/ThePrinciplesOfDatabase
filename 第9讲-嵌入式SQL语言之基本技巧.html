@@ -1,0 +1,349 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>第9讲-嵌入式SQL语言之基本技巧 - 数据库原理</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="前言.html"><strong aria-hidden="true">1.</strong> 前言</a></li><li class="chapter-item expanded affix "><li class="part-title">HIT 数据库系统</li><li class="chapter-item expanded "><a href="课程概述.html"><strong aria-hidden="true">2.</strong> 课程概述</a></li><li class="chapter-item expanded "><a href="第1讲-初步认识数据库系统.html"><strong aria-hidden="true">3.</strong> 第1讲-初步认识数据库系统</a></li><li class="chapter-item expanded "><a href="第2讲-数据库系统的结构抽象与演变.html"><strong aria-hidden="true">4.</strong> 第2讲-数据库系统的结构抽象与演变</a></li><li class="chapter-item expanded "><a href="第3讲-关系模型之基本概念.html"><strong aria-hidden="true">5.</strong> 第3讲-关系模型之基本概念</a></li><li class="chapter-item expanded "><a href="第4讲-关系模型之关系代数（基于集合）.html"><strong aria-hidden="true">6.</strong> 第4讲-关系模型之关系代数（基于集合）</a></li><li class="chapter-item expanded "><a href="第5讲-关系模型之关系演算（基于逻辑）.html"><strong aria-hidden="true">7.</strong> 第5讲-关系模型之关系演算（基于逻辑）</a></li><li class="chapter-item expanded "><a href="第6讲-SQL语言之概述.html"><strong aria-hidden="true">8.</strong> 第6讲-SQL语言之概述</a></li><li class="chapter-item expanded "><a href="第7讲-SQL语言之复杂查询与视图.html"><strong aria-hidden="true">9.</strong> 第7讲-SQL语言之复杂查询与视图</a></li><li class="chapter-item expanded "><a href="第8讲-SQL语言与数据库完整性和安全性.html"><strong aria-hidden="true">10.</strong> 第8讲-SQL语言与数据库完整性和安全性</a></li><li class="chapter-item expanded "><a href="第9讲-嵌入式SQL语言之基本技巧.html" class="active"><strong aria-hidden="true">11.</strong> 第9讲-嵌入式SQL语言之基本技巧</a></li><li class="chapter-item expanded "><a href="第10讲-嵌入式SQL语言之动态SQL.html"><strong aria-hidden="true">12.</strong> 第10讲-嵌入式SQL语言之动态SQL</a></li><li class="chapter-item expanded "><a href="第11讲-数据建模：思想与方法(暨数据库设计之抽象与表达方法).html"><strong aria-hidden="true">13.</strong> 第11讲-数据建模：思想与方法(暨数据库设计之抽象与表达方法)</a></li><li class="chapter-item expanded "><a href="第12讲-数据建模：工程化方法及案例分析.html"><strong aria-hidden="true">14.</strong> 第12讲-数据建模：工程化方法及案例分析</a></li><li class="chapter-item expanded "><a href="第13讲-数据库设计过程.html"><strong aria-hidden="true">15.</strong> 第13讲-数据库设计过程</a></li><li class="chapter-item expanded "><a href="第14讲-函数依赖及其公理定理.html"><strong aria-hidden="true">16.</strong> 第14讲-函数依赖及其公理定理</a></li><li class="chapter-item expanded "><a href="第15讲-关系模式设计之规范形式.html"><strong aria-hidden="true">17.</strong> 第15讲-关系模式设计之规范形式</a></li><li class="chapter-item expanded "><a href="第16讲-模式分解存在什么问题.html"><strong aria-hidden="true">18.</strong> 第16讲-模式分解存在什么问题</a></li><li class="chapter-item expanded "><a href="第17讲-数据库物理存储.html"><strong aria-hidden="true">19.</strong> 第17讲-数据库物理存储</a></li><li class="chapter-item expanded "><a href="第18讲-数据库索引技术.html"><strong aria-hidden="true">20.</strong> 第18讲-数据库索引技术</a></li><li class="chapter-item expanded "><a href="第19讲-数据库查询实现算法之一趟扫描算法.html"><strong aria-hidden="true">21.</strong> 第19讲-数据库查询实现算法之一趟扫描算法</a></li><li class="chapter-item expanded "><a href="第20讲-数据库查询实现算法之两趟扫描算法.html"><strong aria-hidden="true">22.</strong> 第20讲-数据库查询实现算法之两趟扫描算法</a></li><li class="chapter-item expanded "><a href="第21讲-数据库查询优化技术.html"><strong aria-hidden="true">23.</strong> 第21讲-数据库查询优化技术</a></li><li class="chapter-item expanded "><a href="第22讲-数据库事务处理技术之并发控制.html"><strong aria-hidden="true">24.</strong> 第22讲-数据库事务处理技术之并发控制</a></li><li class="chapter-item expanded "><a href="第23讲-数据库事务处理技术之故障恢复.html"><strong aria-hidden="true">25.</strong> 第23讲-数据库事务处理技术之故障恢复</a></li><li class="chapter-item expanded affix "><li class="part-title">附加内容</li><li class="chapter-item expanded "><a href="存储过程.html"><strong aria-hidden="true">26.</strong> 存储过程</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">数据库原理</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="第9讲-嵌入式sql语言之基本技巧"><a class="header" href="#第9讲-嵌入式sql语言之基本技巧">第9讲-嵌入式SQL语言之基本技巧</a></h1>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407190538.png" alt="" /></p>
+<h2 id="900-本讲学习什么1分47秒及第9讲教学课件pdf"><a class="header" href="#900-本讲学习什么1分47秒及第9讲教学课件pdf">900-本讲学习什么（1分47秒）及第9讲教学课件PDF</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407184740.png" alt="" /></p>
+<h2 id="901-什么是嵌入式sql语言10分20秒"><a class="header" href="#901-什么是嵌入式sql语言10分20秒">901-什么是嵌入式SQL语言（10分20秒）</a></h2>
+<p>因此，高级语言+SQL语言：</p>
+<p>既继承高级语言的过程控制性又结合SQL语言的复杂结果集操作的非过程性，同时又为数据库操作者提供安全可靠的操作方式：通过应用程序进行操作。</p>
+<p>嵌入式SQL语言：</p>
+<p>将SQL语言嵌入到某一种高级语言中使用。</p>
+<p>这种高级语言，如C/C++，Java，PowerBuilder等，又称宿主语言（Host Language）</p>
+<p>嵌入在宿主语言中的SQL与前面介绍的交互式SQL有一些不同的操作方式</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407185058.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407185116.png" alt="" /></p>
+<h2 id="902-程序与数据库连接6分35秒"><a class="header" href="#902-程序与数据库连接6分35秒">902-程序与数据库连接（6分35秒）</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407185241.png" alt="" /></p>
+<h2 id="903-为什么需要提交和撤销7分54秒"><a class="header" href="#903-为什么需要提交和撤销7分54秒">903-为什么需要提交和撤销（7分54秒）</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407185400.png" alt="" /></p>
+<h2 id="904-嵌入式sql程序的一个示例5分50秒"><a class="header" href="#904-嵌入式sql程序的一个示例5分50秒">904-嵌入式SQL程序的一个示例（5分50秒）</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407185513.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407185537.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407185554.png" alt="" /></p>
+<h2 id="905-为什么需要游标5分41秒"><a class="header" href="#905-为什么需要游标5分41秒">905-为什么需要游标（5分41秒）</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407185735.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407185656.png" alt="" /></p>
+<p>游标是指向某检索记录集的指针</p>
+<p>通过这个指针的移动，每次读一行，处理一行，再读一行...，直至处理完毕</p>
+<p>游标（Cursor）的使用需要先定义、再打开（执行）、接着一条接一条处理，最后再关闭</p>
+<h2 id="906-游标应用示例9分13秒"><a class="header" href="#906-游标应用示例9分13秒">906-游标应用示例（9分13秒）</a></h2>
+<h2 id="907-可滚动游标4分22秒"><a class="header" href="#907-可滚动游标4分22秒">907-可滚动游标（4分22秒）</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407185932.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407190018.png" alt="" /></p>
+<p>可滚动游标移动时需判断是否到结束位置，或到起始位置</p>
+<ul>
+<li>可通过判断是否到EOF位置（最后一条记录的后面），或BOF位置（起始记录的前面）</li>
+<li>如果不需区分，可通过whenever not found语句设置来检测</li>
+</ul>
+<h2 id="908-利用游标进行数据库增删改3分32秒"><a class="header" href="#908-利用游标进行数据库增删改3分32秒">908-利用游标进行数据库增删改（3分32秒）</a></h2>
+<h2 id="909-利用游标编写的一个程序3分42秒"><a class="header" href="#909-利用游标编写的一个程序3分42秒">909-利用游标编写的一个程序（3分42秒）</a></h2>
+<h2 id="910-异常状态捕获机制14分26秒"><a class="header" href="#910-异常状态捕获机制14分26秒">910-异常状态捕获机制（14分26秒）</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407190222.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407190244.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407190301.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407190324.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407190352.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407190434.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407190457.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407190514.png" alt="" /></p>
+<h2 id="第9讲模拟练习题"><a class="header" href="#第9讲模拟练习题">第9讲模拟练习题</a></h2>
+<p>21执行下面的程序：</p>
+<pre><code class="language-c">int main()
+
+{   
+
+	exec sql  whenever  sqlerror  goto  handle_error；
+	
+	exec sql  create table customers(cid  char(4)  not null, cname varchar(13), …)；
+	
+	…
+	
+	handle_error：
+	
+	exec sql drop customers；
+	
+	exec sql disconnect；
+	
+	fprintf(stderr,”could not create customers table\n”)；
+	
+	return -1；
+
+}
+</code></pre>
+<p>如果customers表在执行过程中出现了问题，没有人为干预，则该程序“Exec sql drop customers；”语句将被执行的次数为无限。</p>
+<p>解析：如果customers表在执行过程中出现问题，程序将跳转到handle_error标签并执行其中的代码。在handle_error标签中，程序会执行"exec sql drop customers"语句，然后再次跳转回handle_error标签。这样会导致无限循环执行该语句，因为每次执行后仍然会出现问题导致再次跳转到handle_error标签。所以，“exec sql drop customers；”语句将被执行的次数为无限次。</p>
+<h2 id="附录-c-with-mysql"><a class="header" href="#附录-c-with-mysql">附录 C With MySQL</a></h2>
+<p>当使用C语言和MySQL进行联合处理时，通常会使用MySQL提供的C API（MySQL C API）来与数据库进行交互。通过这个API，可以在C语言中执行查询、获取结果集、插入记录等操作。</p>
+<p>下面是一个简单的示例代码，演示如何使用C语言和MySQL进行联合处理：</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;mysql/mysql.h&gt;
+
+int main() {
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
+    conn = mysql_init(NULL);
+    if (conn == NULL) {
+        fprintf(stderr, "mysql_init() failed\n");
+        return 1;
+    }
+
+    if (mysql_real_connect(conn, "localhost", "user", "password", "database", 0, NULL, 0) == NULL) {
+        fprintf(stderr, "mysql_real_connect() failed\n");
+        mysql_close(conn);
+        return 1;
+    }
+
+    if (mysql_query(conn, "SELECT * FROM table")) {
+        fprintf(stderr, "mysql_query() failed\n");
+        mysql_close(conn);
+        return 1;
+    }
+
+    res = mysql_store_result(conn);
+    if (res == NULL) {
+        fprintf(stderr, "mysql_store_result() failed\n");
+        mysql_close(conn);
+        return 1;
+    }
+
+    while ((row = mysql_fetch_row(res))) {
+        printf("%s\n", row[0]);
+    }
+
+    mysql_free_result(res);
+    mysql_close(conn);
+
+    return 0;
+}
+</code></pre>
+<p>在上面的代码中，我们首先初始化了一个MySQL连接，然后连接到指定的数据库，执行了一个SELECT查询，并打印查询结果中的第一列数据。</p>
+<p>关于MySQL C API的更多信息和文档，你可以参考MySQL官方网站：<a href="https://dev.mysql.com/doc/c-api/en/%E3%80%82">https://dev.mysql.com/doc/c-api/en/。</a></p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="第8讲-SQL语言与数据库完整性和安全性.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="第10讲-嵌入式SQL语言之动态SQL.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="第8讲-SQL语言与数据库完整性和安全性.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="第10讲-嵌入式SQL语言之动态SQL.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

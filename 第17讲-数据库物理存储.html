@@ -1,0 +1,281 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>第17讲-数据库物理存储 - 数据库原理</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="前言.html"><strong aria-hidden="true">1.</strong> 前言</a></li><li class="chapter-item expanded affix "><li class="part-title">HIT 数据库系统</li><li class="chapter-item expanded "><a href="课程概述.html"><strong aria-hidden="true">2.</strong> 课程概述</a></li><li class="chapter-item expanded "><a href="第1讲-初步认识数据库系统.html"><strong aria-hidden="true">3.</strong> 第1讲-初步认识数据库系统</a></li><li class="chapter-item expanded "><a href="第2讲-数据库系统的结构抽象与演变.html"><strong aria-hidden="true">4.</strong> 第2讲-数据库系统的结构抽象与演变</a></li><li class="chapter-item expanded "><a href="第3讲-关系模型之基本概念.html"><strong aria-hidden="true">5.</strong> 第3讲-关系模型之基本概念</a></li><li class="chapter-item expanded "><a href="第4讲-关系模型之关系代数（基于集合）.html"><strong aria-hidden="true">6.</strong> 第4讲-关系模型之关系代数（基于集合）</a></li><li class="chapter-item expanded "><a href="第5讲-关系模型之关系演算（基于逻辑）.html"><strong aria-hidden="true">7.</strong> 第5讲-关系模型之关系演算（基于逻辑）</a></li><li class="chapter-item expanded "><a href="第6讲-SQL语言之概述.html"><strong aria-hidden="true">8.</strong> 第6讲-SQL语言之概述</a></li><li class="chapter-item expanded "><a href="第7讲-SQL语言之复杂查询与视图.html"><strong aria-hidden="true">9.</strong> 第7讲-SQL语言之复杂查询与视图</a></li><li class="chapter-item expanded "><a href="第8讲-SQL语言与数据库完整性和安全性.html"><strong aria-hidden="true">10.</strong> 第8讲-SQL语言与数据库完整性和安全性</a></li><li class="chapter-item expanded "><a href="第9讲-嵌入式SQL语言之基本技巧.html"><strong aria-hidden="true">11.</strong> 第9讲-嵌入式SQL语言之基本技巧</a></li><li class="chapter-item expanded "><a href="第10讲-嵌入式SQL语言之动态SQL.html"><strong aria-hidden="true">12.</strong> 第10讲-嵌入式SQL语言之动态SQL</a></li><li class="chapter-item expanded "><a href="第11讲-数据建模：思想与方法(暨数据库设计之抽象与表达方法).html"><strong aria-hidden="true">13.</strong> 第11讲-数据建模：思想与方法(暨数据库设计之抽象与表达方法)</a></li><li class="chapter-item expanded "><a href="第12讲-数据建模：工程化方法及案例分析.html"><strong aria-hidden="true">14.</strong> 第12讲-数据建模：工程化方法及案例分析</a></li><li class="chapter-item expanded "><a href="第13讲-数据库设计过程.html"><strong aria-hidden="true">15.</strong> 第13讲-数据库设计过程</a></li><li class="chapter-item expanded "><a href="第14讲-函数依赖及其公理定理.html"><strong aria-hidden="true">16.</strong> 第14讲-函数依赖及其公理定理</a></li><li class="chapter-item expanded "><a href="第15讲-关系模式设计之规范形式.html"><strong aria-hidden="true">17.</strong> 第15讲-关系模式设计之规范形式</a></li><li class="chapter-item expanded "><a href="第16讲-模式分解存在什么问题.html"><strong aria-hidden="true">18.</strong> 第16讲-模式分解存在什么问题</a></li><li class="chapter-item expanded "><a href="第17讲-数据库物理存储.html" class="active"><strong aria-hidden="true">19.</strong> 第17讲-数据库物理存储</a></li><li class="chapter-item expanded "><a href="第18讲-数据库索引技术.html"><strong aria-hidden="true">20.</strong> 第18讲-数据库索引技术</a></li><li class="chapter-item expanded "><a href="第19讲-数据库查询实现算法之一趟扫描算法.html"><strong aria-hidden="true">21.</strong> 第19讲-数据库查询实现算法之一趟扫描算法</a></li><li class="chapter-item expanded "><a href="第20讲-数据库查询实现算法之两趟扫描算法.html"><strong aria-hidden="true">22.</strong> 第20讲-数据库查询实现算法之两趟扫描算法</a></li><li class="chapter-item expanded "><a href="第21讲-数据库查询优化技术.html"><strong aria-hidden="true">23.</strong> 第21讲-数据库查询优化技术</a></li><li class="chapter-item expanded "><a href="第22讲-数据库事务处理技术之并发控制.html"><strong aria-hidden="true">24.</strong> 第22讲-数据库事务处理技术之并发控制</a></li><li class="chapter-item expanded "><a href="第23讲-数据库事务处理技术之故障恢复.html"><strong aria-hidden="true">25.</strong> 第23讲-数据库事务处理技术之故障恢复</a></li><li class="chapter-item expanded affix "><li class="part-title">附加内容</li><li class="chapter-item expanded "><a href="存储过程.html"><strong aria-hidden="true">26.</strong> 存储过程</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">数据库原理</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="第17讲-数据库物理存储"><a class="header" href="#第17讲-数据库物理存储">第17讲-数据库物理存储</a></h1>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407183420.png" alt="" /></p>
+<h2 id="1700-第17讲本讲学习什么2分40秒及第17讲教学课件"><a class="header" href="#1700-第17讲本讲学习什么2分40秒及第17讲教学课件">1700-第17讲本讲学习什么（2分40秒）及第17讲教学课件</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407181248.png" alt="" /></p>
+<h2 id="1701-存储体系回顾13分48秒"><a class="header" href="#1701-存储体系回顾13分48秒">1701-存储体系回顾（13分48秒）</a></h2>
+<p>两个基本问题如何解决？</p>
+<p>如何高效率的存储？——数据组织与索引</p>
+<p>如何快速的检索？——查询实现与查询优化</p>
+<p>面向大规模用户又如何解决？</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407181516.png" alt="" /></p>
+<h2 id="1702-磁盘的结构与特性17分19秒"><a class="header" href="#1702-磁盘的结构与特性17分19秒">1702-磁盘的结构与特性（17分19秒）</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407181556.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407181651.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407182106.png" alt="" /></p>
+<h2 id="1703-查询实现的基本思想12分41秒"><a class="header" href="#1703-查询实现的基本思想12分41秒">1703-查询实现的基本思想（12分41秒）</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407182143.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407182203.png" alt="" /></p>
+<h2 id="1704-记录与表在磁盘上的存储12分12秒"><a class="header" href="#1704-记录与表在磁盘上的存储12分12秒">1704-记录与表在磁盘上的存储（12分12秒）</a></h2>
+<p>数据库记录在磁盘上的存储</p>
+<p>定长记录，还是变长记录（靠分隔符区分开始与结束）</p>
+<p>记录是非跨块存储，还是跨块存储（靠指针连接）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407182434.png" alt="" /></p>
+<h2 id="1705-四种文件组织方法16分01秒"><a class="header" href="#1705-四种文件组织方法16分01秒">1705-四种文件组织方法（16分01秒）</a></h2>
+<p>（1）数据组织与存取方法</p>
+<p>数据组织要考虑更新（增、删、改）和检索需求</p>
+<ul>
+<li>更新将涉及数据存储空间的扩展与回收问题</li>
+<li>检索将涉及扫描整个数据库的问题、大批量处理数据问题</li>
+<li>不同的需求要求不同的数据组织方法和存取方法</li>
+<li>文件组织（File organization）指的是数据组织成记录、块和访问结构的方式，包括把记录和块存储在磁盘上的方式，以及记录和块之间相互联系的方法</li>
+<li>存取方法（Access Method）指的是对文件所采取的存取操作方法</li>
+<li>一种文件组织可以采取多种存取方法进行访问</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407182821.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407182908.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407183001.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407183026.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407183111.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407183141.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407183211.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407183251.png" alt="" /></p>
+<h2 id="1706-oracle数据库物理存储简介14分43秒"><a class="header" href="#1706-oracle数据库物理存储简介14分43秒">1706-Oracle数据库物理存储简介（14分43秒）</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240407183329.png" alt="" /></p>
+<h2 id="第17讲模拟练习题"><a class="header" href="#第17讲模拟练习题">第17讲模拟练习题</a></h2>
+<p>9、数据库重组是对数据表的物理存储进行调整。</p>
+<p>12、在堆文件组织结构中，记录通常是以输入顺序存储的。</p>
+<p>13、在顺序文件组织结构中，记录通常是按照某一键值的顺序（升序或降序）存储。</p>
+<p>14、如果要将一批记录均匀地存储在n个数据块中，应采用散列文件组织结构。</p>
+<p>解析：</p>
+<p>顺序文件是按照某一键值的顺序（开序或降序）存储。</p>
+<p>堆文件是无序记录文件，通常是按照记录的输入顺序存储的，但如要利用被删除记录的空间，则也可能将其插入到被删除记录的空间中。</p>
+<p>散列文件是按照关于键值的某一散列函数值确定的位置进行存储，散列文件组织具有将一批记录均匀存储在 n 个数据块中的特性。</p>
+<p>聚簇文件是将一个表或多个表的数据集中在一起进行存储。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="第16讲-模式分解存在什么问题.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="第18讲-数据库索引技术.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="第16讲-模式分解存在什么问题.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="第18讲-数据库索引技术.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

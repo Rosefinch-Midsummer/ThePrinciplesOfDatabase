@@ -1,0 +1,420 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>第7讲-SQL语言之复杂查询与视图 - 数据库原理</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="前言.html"><strong aria-hidden="true">1.</strong> 前言</a></li><li class="chapter-item expanded affix "><li class="part-title">HIT 数据库系统</li><li class="chapter-item expanded "><a href="课程概述.html"><strong aria-hidden="true">2.</strong> 课程概述</a></li><li class="chapter-item expanded "><a href="第1讲-初步认识数据库系统.html"><strong aria-hidden="true">3.</strong> 第1讲-初步认识数据库系统</a></li><li class="chapter-item expanded "><a href="第2讲-数据库系统的结构抽象与演变.html"><strong aria-hidden="true">4.</strong> 第2讲-数据库系统的结构抽象与演变</a></li><li class="chapter-item expanded "><a href="第3讲-关系模型之基本概念.html"><strong aria-hidden="true">5.</strong> 第3讲-关系模型之基本概念</a></li><li class="chapter-item expanded "><a href="第4讲-关系模型之关系代数（基于集合）.html"><strong aria-hidden="true">6.</strong> 第4讲-关系模型之关系代数（基于集合）</a></li><li class="chapter-item expanded "><a href="第5讲-关系模型之关系演算（基于逻辑）.html"><strong aria-hidden="true">7.</strong> 第5讲-关系模型之关系演算（基于逻辑）</a></li><li class="chapter-item expanded "><a href="第6讲-SQL语言之概述.html"><strong aria-hidden="true">8.</strong> 第6讲-SQL语言之概述</a></li><li class="chapter-item expanded "><a href="第7讲-SQL语言之复杂查询与视图.html" class="active"><strong aria-hidden="true">9.</strong> 第7讲-SQL语言之复杂查询与视图</a></li><li class="chapter-item expanded "><a href="第8讲-SQL语言与数据库完整性和安全性.html"><strong aria-hidden="true">10.</strong> 第8讲-SQL语言与数据库完整性和安全性</a></li><li class="chapter-item expanded "><a href="第9讲-嵌入式SQL语言之基本技巧.html"><strong aria-hidden="true">11.</strong> 第9讲-嵌入式SQL语言之基本技巧</a></li><li class="chapter-item expanded "><a href="第10讲-嵌入式SQL语言之动态SQL.html"><strong aria-hidden="true">12.</strong> 第10讲-嵌入式SQL语言之动态SQL</a></li><li class="chapter-item expanded "><a href="第11讲-数据建模：思想与方法(暨数据库设计之抽象与表达方法).html"><strong aria-hidden="true">13.</strong> 第11讲-数据建模：思想与方法(暨数据库设计之抽象与表达方法)</a></li><li class="chapter-item expanded "><a href="第12讲-数据建模：工程化方法及案例分析.html"><strong aria-hidden="true">14.</strong> 第12讲-数据建模：工程化方法及案例分析</a></li><li class="chapter-item expanded "><a href="第13讲-数据库设计过程.html"><strong aria-hidden="true">15.</strong> 第13讲-数据库设计过程</a></li><li class="chapter-item expanded "><a href="第14讲-函数依赖及其公理定理.html"><strong aria-hidden="true">16.</strong> 第14讲-函数依赖及其公理定理</a></li><li class="chapter-item expanded "><a href="第15讲-关系模式设计之规范形式.html"><strong aria-hidden="true">17.</strong> 第15讲-关系模式设计之规范形式</a></li><li class="chapter-item expanded "><a href="第16讲-模式分解存在什么问题.html"><strong aria-hidden="true">18.</strong> 第16讲-模式分解存在什么问题</a></li><li class="chapter-item expanded "><a href="第17讲-数据库物理存储.html"><strong aria-hidden="true">19.</strong> 第17讲-数据库物理存储</a></li><li class="chapter-item expanded "><a href="第18讲-数据库索引技术.html"><strong aria-hidden="true">20.</strong> 第18讲-数据库索引技术</a></li><li class="chapter-item expanded "><a href="第19讲-数据库查询实现算法之一趟扫描算法.html"><strong aria-hidden="true">21.</strong> 第19讲-数据库查询实现算法之一趟扫描算法</a></li><li class="chapter-item expanded "><a href="第20讲-数据库查询实现算法之两趟扫描算法.html"><strong aria-hidden="true">22.</strong> 第20讲-数据库查询实现算法之两趟扫描算法</a></li><li class="chapter-item expanded "><a href="第21讲-数据库查询优化技术.html"><strong aria-hidden="true">23.</strong> 第21讲-数据库查询优化技术</a></li><li class="chapter-item expanded "><a href="第22讲-数据库事务处理技术之并发控制.html"><strong aria-hidden="true">24.</strong> 第22讲-数据库事务处理技术之并发控制</a></li><li class="chapter-item expanded "><a href="第23讲-数据库事务处理技术之故障恢复.html"><strong aria-hidden="true">25.</strong> 第23讲-数据库事务处理技术之故障恢复</a></li><li class="chapter-item expanded affix "><li class="part-title">附加内容</li><li class="chapter-item expanded "><a href="存储过程.html"><strong aria-hidden="true">26.</strong> 存储过程</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">数据库原理</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="第7讲-sql语言之复杂查询与视图"><a class="header" href="#第7讲-sql语言之复杂查询与视图">第7讲-SQL语言之复杂查询与视图</a></h1>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325152118.png" alt="" /></p>
+<h2 id="700-本讲学习什么1分25秒及第7讲教学课件pdf"><a class="header" href="#700-本讲学习什么1分25秒及第7讲教学课件pdf">700-本讲学习什么（1分25秒）及第7讲教学课件PDF</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325121911.png" alt="" /></p>
+<h2 id="701-in子查询11分47秒"><a class="header" href="#701-in子查询11分47秒">701-IN子查询(11分47秒)</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325132439.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325132525.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325132623.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325132725.png" alt="" /></p>
+<h2 id="702-thetasome子查询12分53秒"><a class="header" href="#702-thetasome子查询12分53秒">702-ThetaSome子查询(12分53秒)</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325132755.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325132828.png" alt="" /></p>
+<p>为什么不用 Theta-any？</p>
+<p>在SQL标准中，也有 Theta-any 谓词，但由于其语义的模糊性：any，“任一”是指所有呢？还是指某一个？不清楚，所以被 Theta-some 替代以求更明晰。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325133058.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325133132.png" alt="" /></p>
+<h2 id="703-exists子查询11分48秒"><a class="header" href="#703-exists子查询11分48秒">703-Exists子查询(11分48秒)</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325133209.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325133257.png" alt="" /></p>
+<p>当在 SQL 中使用 IN 和 EXISTS 时，它们的主要区别在于它们的执行方式和用途。IN 子查询会将结果集与主查询进行比较，而 EXISTS 子查询只需检查子查询是否返回任何行即可。</p>
+<p>下面是一个简单的示例来展示 IN 和 EXISTS 的区别：</p>
+<p>使用 IN：</p>
+<p><code>SELECT *  FROM table1 WHERE column1 IN (SELECT column2 FROM table2);</code></p>
+<p>使用 EXISTS：</p>
+<p><code>SELECT *  FROM table1 t1 WHERE EXISTS (SELECT 1 FROM table2 t2 WHERE t1.column1 = t2.column2);</code></p>
+<p>关于 IN 和 EXISTS 的更多详细信息，请参考以下链接：</p>
+<ol>
+<li><a href="https://www.geeksforgeeks.org/in-vs-exists-in-sql/">IN vs EXISTS in SQL</a></li>
+<li><a href="https://www.sqlshack.com/difference-between-in-and-exists-in-sql-server/">Difference between IN and EXISTS in S</a></li>
+</ol>
+<p>子查询表小的用in，子查询表大的用exists。</p>
+<p><a href="https://blog.csdn.net/taomeechildren/article/details/128922688">从原理浅析MySQL中exists和in的区别（如何选用exists和in）</a></p>
+<p>但执行过程的区别在于：</p>
+<p>exists子句会对外表（即t1）用loop逐条记录查询，每次查询都会查看exists中的select语句，如果select子句返回记录行（无论返回记录行是多少，只要能返回），exists就会返回true，则外表中的当前记录就会被检索出来；如果select子句没有返回记录行，exists就会返回false，则外表中的当前记录就会被丢弃。——exist子句循环每次取出外表中的一条记录用来执行exists中的语句查内表，是先查外表，再查内表（相关子查询）。</p>
+<p>in查询相当于多个or条件的叠加。in子句需要先将子查询的记录全部查出来。注意in子句中的子查询返回的结果集必须只有一个字段。假设子查询返回的结果集有m条记录，在进行m次查询。——in子句是先执行in中的子句查出来内表的结果，然后外表针对内表查出来的结果一个个遍历匹配。即先查内表，再查外表（不相关子查询）。</p>
+<p>基于以上的认识：</p>
+<p>exists只有内表可以用上索引，外层循环必须要走一个遍历过程；而in内表和外表都可以用上索引，因为in本质上属于多个条件查询的并集(or)。</p>
+<p>如何选用exists和in？</p>
+<p>当两个表的大小相当时，用exists和in的效率差别不大。</p>
+<p>如果两个表一个大一个小，则子查询表(即内表)大的用exists，子查询表(即内表)小的用in。
+其实就是”小表驱动大表“的思想：用exist时外表是驱动表，用in时内表是驱动表。</p>
+<p>MySQL的外连接就利用了”小表驱动大表“的思想做自动优化，因此有时候会发现LEFT JOIN左侧的不是驱动表而是被驱动表，其实就是MySQL优化器的功能。同理，内连接也有类似的情况。</p>
+<h2 id="704-结果计算与聚集计算6分57秒"><a class="header" href="#704-结果计算与聚集计算6分57秒">704-结果计算与聚集计算(6分57秒)</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325145109.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325145215.png" alt="" /></p>
+<h2 id="705-分组聚集计算与分组过滤10分38秒"><a class="header" href="#705-分组聚集计算与分组过滤10分38秒">705-分组聚集计算与分组过滤(10分38秒)</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325145247.png" alt="" /></p>
+<p>GROUP BY 语句用于结合聚合函数，根据一个或多个列对结果集进行分组。</p>
+<p>SQL GROUP BY 语法：</p>
+<pre><code class="language-sql">SELECT column_name, aggregate_function(column_name)  
+FROM table_name  
+WHERE column_name operator value  
+GROUP BY column_name;
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325145340.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325145403.png" alt="" /></p>
+<p>在 SQL 中增加 HAVING 子句原因是，WHERE 关键字无法与聚合函数一起使用。</p>
+<p>HAVING 子句可以让我们筛选分组后的各组数据。</p>
+<p>SQL HAVING 语法：</p>
+<pre><code class="language-sql">SELECT column1, aggregate_function(column2) FROM table_name GROUP BY column1 HAVING condition;
+</code></pre>
+<p><strong>参数说明：</strong></p>
+<ul>
+<li><code>column1</code>：要检索的列。</li>
+<li><code>aggregate_function(column2)</code>：一个聚合函数，例如SUM、COUNT、AVG等，应用于<code>column2</code>的值。</li>
+<li><code>table_name</code>：要从中检索数据的表。</li>
+<li><code>GROUP BY column1</code>：根据<code>column1</code>列的值对数据进行分组。</li>
+<li><code>HAVING condition</code>：一个条件，用于筛选分组的结果。只有满足条件的分组会包含在结果集中。</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325145517.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325150027.png" alt="" /></p>
+<h2 id="706-用sql表达并交差操作7分20秒"><a class="header" href="#706-用sql表达并交差操作7分20秒">706-用SQL表达并交差操作(7分20秒)</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325150138.png" alt="" /></p>
+<p>UNION运算符是Entry-SQL92的一部分</p>
+<p>INTERSECT、EXCEPT运算符是Full-SQL92的一部分</p>
+<p>它们都是Core-SQL99的一部分，但有些DBMS并不支持这些运算，使用时要注意</p>
+<h2 id="707-用sql处理空值3分53秒"><a class="header" href="#707-用sql处理空值3分53秒">707-用SQL处理空值(3分53秒)</a></h2>
+<p>空值是其值不知道、不确定、不存在的值</p>
+<p>数据库中有了空值，会影响许多方面，如影响聚集函数运算的正确性，不能参与算术、比较或逻辑运算等</p>
+<p>例如：右下图所示表SC，如果有某一记录为空值，则求001号课程的平均成绩？会是多少呢？</p>
+<p>以前，很多DBMS将空值按默认值处理，如字符串类型则以空格来表示，而如数值类型则以0来表示，这也将会引起统计、计算上的不正确性。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325150440.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325150519.png" alt="" /></p>
+<h2 id="708-用sql表达连接与外连接操作5分35秒"><a class="header" href="#708-用sql表达连接与外连接操作5分35秒">708-用SQL表达连接与外连接操作(5分35秒)</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325150550.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325150613.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325150655.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325150840.png" alt="" /></p>
+<h2 id="709-sql-select小结4分28秒"><a class="header" href="#709-sql-select小结4分28秒">709-SQL-SELECT小结(4分28秒)</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325151207.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325151224.png" alt="" /></p>
+<p>面向对象/对象关系数据库的查询SQL→OQL</p>
+<p>基本的SQL：另一SELECT-FROM-WHERE只能出现在WHERE子句；</p>
+<p>新标准：引入对象概念，可以在能使用聚集（collection）的任何位置使用SELECT-FROM-WEHRE</p>
+<p>FROM子句中使用</p>
+<p>SELECT子句中使用</p>
+<p>Where子句中使用</p>
+<p>注意：本课程要求基本的 SQL</p>
+<h2 id="710-sql视图14分17秒"><a class="header" href="#710-sql视图14分17秒">710-SQL视图(14分17秒)</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325151505.png" alt="" /></p>
+<p>SQL数据库结构</p>
+<ul>
+<li>基本表是实际存储于存储文件中的表，基本表中的数据是需要存储的</li>
+<li>视图在SQL中只存储其由基本表导出视图所需要的公式，即由基本表产生视图的映像信息，不存储其数据，而是在运行过程中动态产生与维护</li>
+<li>对视图数据的更改最终要反映在对基本表的更改上</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325151656.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325151726.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325151800.png" alt="" /></p>
+<p>可更新的视图是指可以对其进行插入、更新、删除操作的视图，这种视图通常基于单一表或多个表的简单查询结果构建而成，例如只包含一张表或者包含多张表但是通过 join 操作将其连接在一起的视图。在对可更新的视图进行操作时，系统会自动反映到视图所基于的表上。</p>
+<p>不可更新的视图是指不能对其进行插入、更新、删除操作的视图，这种视图通常基于复杂的查询结果或包含特定计算、聚合、分组等操作的结果。例如，包含 group by 子句、distinct 子句、计算列、集合运算等的视图通常是不可更新的。在对不可更新的视图进行操作时，系统会提示更新失败或抛出错误信息。</p>
+<p>总的来说，可更新的视图一般是简单的、基于单表或多表的连接查询，而不可更新的视图一般是复杂的、包含特定操作或计算结果的查询。</p>
+<p>已经定义的视图也可以撤消</p>
+<p>撤消视图</p>
+<p><code>Drop View Viewname</code></p>
+<p>当某一视图删除后，由该视图导出的其它视图也将自动删除</p>
+<p>不仅视图可以撤消，基本表、数据库等都可以撤消</p>
+<p>撤消基本表</p>
+<p><code>Drop Table 表名</code></p>
+<h2 id="第7讲模拟练习题"><a class="header" href="#第7讲模拟练习题">第7讲模拟练习题</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240325150138.png" alt="" /></p>
+<p>这个问题需要理解SQL中的集合运算符（如EXCEPT，UNION，INTERSECT）的工作方式。下面是对四个选项的解释：</p>
+<p>“子查询1 Except 子查询2”返回在子查询1中出现但不在子查询2中出现的元组。</p>
+<p>“子查询1 Union 子查询2”返回在子查询1和子查询2中出现的所有元组，但重复的元组只会出现一次。</p>
+<p>“子查询1 Except ALL 子查询2”返回在子查询1中出现但不在子查询2中出现的元组，但是这个运算会考虑重复的元组。</p>
+<p>“子查询1 Intersect 子查询2”返回同时在子查询1和子查询2中出现的元组。</p>
+<p>31<strong>假设一个元组在子查询1中出现m次，在子查询2中出现n次，其中m&gt;0,n&gt;0, 则下列说法正确的是____ ____。</strong></p>
+<ul>
+<li>
+<p>A.该元组在“子查询1  Except  子查询2”中出现0次；</p>
+</li>
+<li>
+<p>B.该元组在“子查询1  Union  子查询2”中出现m + n次；</p>
+</li>
+<li>
+<p>C.该元组在 “子查询1  Except  ALL  子查询2”中出现m – n次；</p>
+</li>
+<li>
+<p>D.该元组在“子查询1  Intersect  子查询2”中出现min(m,n)次；</p>
+</li>
+</ul>
+<p>正确答案：A你错选为D</p>
+<p>A.（正确答案）解析：Except是集合操作，出现0次</p>
+<p>B.（错误答案）解析：此选项不正确。Union是集合操作，需去掉重复的元组</p>
+<p>C.（错误答案）解析：此选项不正确。ExceptALL是包的操作，但应出现max（0，m-n）</p>
+<p>D.（错误答案）解析：此选项不正确。Intersect是集合运算，只能出现一次。</p>
+<p>32<strong>假设一个元组在子查询1中出现m次，在子查询2中出现n次，其中m&gt;0,n&gt;0,则下列说法正确的是_________。</strong></p>
+<ul>
+<li>
+<p>A.该元组在“子查询1  Union  ALL 子查询2”中出现m + n次；</p>
+</li>
+<li>
+<p>B.该元组在 “子查询1 Union  子查询2”中出现m+n次；</p>
+</li>
+<li>
+<p>C.该元组在“子查询1  Union  ALL 子查询2”中出现1次；</p>
+</li>
+<li>
+<p>D.该元组在 “子查询1 Union  子查询2”中出现min(m,n)次；</p>
+</li>
+</ul>
+<p>正确答案：A你选对了</p>
+<p>A.（正确答案）解析：此选项正确。UnionALL是包的操作，应出现m+n次</p>
+<p>B.（错误答案）解析：此选项不正确。Union是集合的操作，应去掉重复的元组</p>
+<p>C.（错误答案）解析：此选项不正确。UnionALL是包的操作，不应去掉重复的元组</p>
+<p>D.（错误答案）解析：此选项不正确。Union是集合的操作，只能出现一次</p>
+<p>33<strong>假设一个元组在子查询1中出现m次，在子查询2中出现n次，其中m&gt;0,n&gt;0,则下列说法正确的是_________。</strong></p>
+<ul>
+<li>
+<p>A.该元组在“子查询1  Except  子查询2”中出现0次；</p>
+</li>
+<li>
+<p>B.该元组在“子查询1  Union  子查询2”中出现m + n次；</p>
+</li>
+<li>
+<p>C.该元组在 “子查询1  Except All 子查询2”中出现m – n次；</p>
+</li>
+<li>
+<p>D.该元组在“子查询1  Union All  子查询2”中出现max(m,n)次；</p>
+</li>
+</ul>
+<p>正确答案：A你错选为B</p>
+<p>A.（正确答案）解析：此选项正确</p>
+<p>B.（错误答案）解析：此选项不正确。Union是集合操作，只能出现一次</p>
+<p>C.（错误答案）解析：此选项不正确。ExceptALL是包的操作，可出现<code>max(0, m-n)</code>次</p>
+<p>D.（错误答案）解析：此选项不正确。UnionALL是包操作，出现m+n次。</p>
+<p>40<strong>有一个学生表student，包含主键S#（学生编号）等。又有分数表SC，包含S#（学生编号）、score（分数）等。已知student表中共有50个学生，有45人参加了考试（分数存在SC表中），其中10人不及格。执行以下SQL语句：select * from student where exists (select S# from SC where score&lt;60 )， 可返回多少条记录？</strong></p>
+<p>A.（正确答案）解析：此选项正确。因为这是非相关子查询，而且子查询始终为真（因为已
+知有10人不及格），故检索出的是Student表中的所有记录</p>
+<p>该SQL语句的结构使用了子查询和EXISTS关键字，这是一个半连接查询。它的意义是：如果子查询（select S# from SC where score&lt;60）返回的结果集不为空，那么主查询就会执行。这里的子查询是查找SC表中分数小于60的学生编号，根据题目，有10名学生不及格，所以子查询的结果集肯定不为空。</p>
+<p><strong>然而，这个SQL语句的问题是，子查询并未与主查询产生直接的关联。即，主查询并不会因为子查询返回的S#而过滤结果。当EXISTS子查询返回真（即，存在至少一个满足条件的记录时），主查询就会返回所有记录</strong>。</p>
+<p>所以，执行这个SQL语句将返回student表中所有的记录，即返回<strong>50条记录</strong>。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="第6讲-SQL语言之概述.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="第8讲-SQL语言与数据库完整性和安全性.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="第6讲-SQL语言之概述.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="第8讲-SQL语言与数据库完整性和安全性.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

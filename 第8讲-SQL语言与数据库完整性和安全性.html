@@ -1,0 +1,320 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>第8讲-SQL语言与数据库完整性和安全性 - 数据库原理</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="前言.html"><strong aria-hidden="true">1.</strong> 前言</a></li><li class="chapter-item expanded affix "><li class="part-title">HIT 数据库系统</li><li class="chapter-item expanded "><a href="课程概述.html"><strong aria-hidden="true">2.</strong> 课程概述</a></li><li class="chapter-item expanded "><a href="第1讲-初步认识数据库系统.html"><strong aria-hidden="true">3.</strong> 第1讲-初步认识数据库系统</a></li><li class="chapter-item expanded "><a href="第2讲-数据库系统的结构抽象与演变.html"><strong aria-hidden="true">4.</strong> 第2讲-数据库系统的结构抽象与演变</a></li><li class="chapter-item expanded "><a href="第3讲-关系模型之基本概念.html"><strong aria-hidden="true">5.</strong> 第3讲-关系模型之基本概念</a></li><li class="chapter-item expanded "><a href="第4讲-关系模型之关系代数（基于集合）.html"><strong aria-hidden="true">6.</strong> 第4讲-关系模型之关系代数（基于集合）</a></li><li class="chapter-item expanded "><a href="第5讲-关系模型之关系演算（基于逻辑）.html"><strong aria-hidden="true">7.</strong> 第5讲-关系模型之关系演算（基于逻辑）</a></li><li class="chapter-item expanded "><a href="第6讲-SQL语言之概述.html"><strong aria-hidden="true">8.</strong> 第6讲-SQL语言之概述</a></li><li class="chapter-item expanded "><a href="第7讲-SQL语言之复杂查询与视图.html"><strong aria-hidden="true">9.</strong> 第7讲-SQL语言之复杂查询与视图</a></li><li class="chapter-item expanded "><a href="第8讲-SQL语言与数据库完整性和安全性.html" class="active"><strong aria-hidden="true">10.</strong> 第8讲-SQL语言与数据库完整性和安全性</a></li><li class="chapter-item expanded "><a href="第9讲-嵌入式SQL语言之基本技巧.html"><strong aria-hidden="true">11.</strong> 第9讲-嵌入式SQL语言之基本技巧</a></li><li class="chapter-item expanded "><a href="第10讲-嵌入式SQL语言之动态SQL.html"><strong aria-hidden="true">12.</strong> 第10讲-嵌入式SQL语言之动态SQL</a></li><li class="chapter-item expanded "><a href="第11讲-数据建模：思想与方法(暨数据库设计之抽象与表达方法).html"><strong aria-hidden="true">13.</strong> 第11讲-数据建模：思想与方法(暨数据库设计之抽象与表达方法)</a></li><li class="chapter-item expanded "><a href="第12讲-数据建模：工程化方法及案例分析.html"><strong aria-hidden="true">14.</strong> 第12讲-数据建模：工程化方法及案例分析</a></li><li class="chapter-item expanded "><a href="第13讲-数据库设计过程.html"><strong aria-hidden="true">15.</strong> 第13讲-数据库设计过程</a></li><li class="chapter-item expanded "><a href="第14讲-函数依赖及其公理定理.html"><strong aria-hidden="true">16.</strong> 第14讲-函数依赖及其公理定理</a></li><li class="chapter-item expanded "><a href="第15讲-关系模式设计之规范形式.html"><strong aria-hidden="true">17.</strong> 第15讲-关系模式设计之规范形式</a></li><li class="chapter-item expanded "><a href="第16讲-模式分解存在什么问题.html"><strong aria-hidden="true">18.</strong> 第16讲-模式分解存在什么问题</a></li><li class="chapter-item expanded "><a href="第17讲-数据库物理存储.html"><strong aria-hidden="true">19.</strong> 第17讲-数据库物理存储</a></li><li class="chapter-item expanded "><a href="第18讲-数据库索引技术.html"><strong aria-hidden="true">20.</strong> 第18讲-数据库索引技术</a></li><li class="chapter-item expanded "><a href="第19讲-数据库查询实现算法之一趟扫描算法.html"><strong aria-hidden="true">21.</strong> 第19讲-数据库查询实现算法之一趟扫描算法</a></li><li class="chapter-item expanded "><a href="第20讲-数据库查询实现算法之两趟扫描算法.html"><strong aria-hidden="true">22.</strong> 第20讲-数据库查询实现算法之两趟扫描算法</a></li><li class="chapter-item expanded "><a href="第21讲-数据库查询优化技术.html"><strong aria-hidden="true">23.</strong> 第21讲-数据库查询优化技术</a></li><li class="chapter-item expanded "><a href="第22讲-数据库事务处理技术之并发控制.html"><strong aria-hidden="true">24.</strong> 第22讲-数据库事务处理技术之并发控制</a></li><li class="chapter-item expanded "><a href="第23讲-数据库事务处理技术之故障恢复.html"><strong aria-hidden="true">25.</strong> 第23讲-数据库事务处理技术之故障恢复</a></li><li class="chapter-item expanded affix "><li class="part-title">附加内容</li><li class="chapter-item expanded "><a href="存储过程.html"><strong aria-hidden="true">26.</strong> 存储过程</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">数据库原理</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="第8讲-sql语言与数据库完整性和安全性"><a class="header" href="#第8讲-sql语言与数据库完整性和安全性">第8讲-SQL语言与数据库完整性和安全性</a></h1>
+<h2 id="800-本讲学习什么1分04秒及第8讲教学课件pdf"><a class="header" href="#800-本讲学习什么1分04秒及第8讲教学课件pdf">800-本讲学习什么（1分04秒）及第8讲教学课件PDF</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240326143516.png" alt="" /></p>
+<h2 id="801-数据库完整性概念及完整性约束规则8分59秒"><a class="header" href="#801-数据库完整性概念及完整性约束规则8分59秒">801-数据库完整性概念及完整性约束规则(8分59秒)</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240326143552.png" alt="" /></p>
+<p>为什么会引发数据库完整性的问题呢？</p>
+<ul>
+<li>不正当的数据库操作，如输入错误、操作失误、程序处理失误等</li>
+</ul>
+<p>数据库完整性管理的作用</p>
+<ul>
+<li>防止和避免数据库中不合理数据的出现</li>
+<li>DBMS应尽可能地自动防止DB中语义不合理现象</li>
+<li>如DBMS不能自动防止，则需要应用程序员和用户在进行数据库操作时处处加以小心，每写一条SQL语句都要考虑是否符合语义完整性，这种工作负担是非常沉重的，因此应尽可能多地让DBMS来承担</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240326143842.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240326143905.png" alt="" /></p>
+<h2 id="802-数据库完整性分类4分16秒"><a class="header" href="#802-数据库完整性分类4分16秒">802-数据库完整性分类(4分16秒)</a></h2>
+<p>一、按约束对象分类</p>
+<p>域完整性约束条件：施加于某一列上，对给定列上所要更新的某一候选值是否可以接受进行约束条件判断，这是孤立进行的</p>
+<p>关系完整性约束条件：施加于关系/table上，对给定table上所要更新的某一候选元组是否可以接受进行约束条件判断，或是对一个关系中的若干元组和另一个关系中的若干元组间的联系是否可以接受进行约束条件判断</p>
+<p>二、按约束来源分类</p>
+<p>结构约束：来自模型的约束，例如函数依赖约束、主键约束（实体完整性）、外键约束（参照完整性），只关心数值相等与否、是否允许空值等；</p>
+<p>内容约束：来自用户的约束，如用户自定义完整性，关心元组或属性的取值范围。例如Student表的Sage属性值在15岁至40岁之间等</p>
+<p>三、按约束状态分类</p>
+<p>静态约束：要求DB在任一时候均应满足的约束；例如Sage在任何时候都应满足大于0而小于150（假定人活最大年龄是150）。</p>
+<p>动态约束：要求DB从一状态变为另一状态时应满足的约束；例如工资只能升，不能降：工资可以是800元，也可以是1000元；可以从800元更改为1000元，但不能从1000元更改为800元</p>
+<h2 id="803-sql表完整性与列完整性21分11秒"><a class="header" href="#803-sql表完整性与列完整性21分11秒">803-SQL表完整性与列完整性(21分11秒)</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240326144513.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240326144533.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240326144601.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240326144628.png" alt="" /></p>
+<p><strong>check中的条件可以是Select-From-Where内任何Where后的语句，包含子查询。</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240326144802.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240326144833.png" alt="" /></p>
+<h2 id="804-sql的断言及其应用4分50秒"><a class="header" href="#804-sql的断言及其应用4分50秒">804-SQL的断言及其应用(4分50秒)</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240326144854.png" alt="" /></p>
+<h2 id="805-sql的触发器的概念6分34秒"><a class="header" href="#805-sql的触发器的概念6分34秒">805-SQL的触发器的概念(6分34秒)</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240326152429.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240326152501.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240326152521.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240326152545.png" alt="" /></p>
+<h2 id="806-触发器应用示例之一7分32秒"><a class="header" href="#806-触发器应用示例之一7分32秒">806-触发器应用示例之一(7分32秒)</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240326152613.png" alt="" /></p>
+<h2 id="807-触发器应用示例之二5分29秒"><a class="header" href="#807-触发器应用示例之二5分29秒">807-触发器应用示例之二(5分29秒)</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240326152652.png" alt="" /></p>
+<h2 id="808-第8讲回顾本讲学习了什么-完整性回顾1分51秒"><a class="header" href="#808-第8讲回顾本讲学习了什么-完整性回顾1分51秒">808-第8讲回顾本讲学习了什么-完整性回顾(1分51秒)</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240326152711.png" alt="" /></p>
+<h2 id="809-数据库安全性的概念6分06秒"><a class="header" href="#809-数据库安全性的概念6分06秒">809-数据库安全性的概念(6分06秒)</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240326220018.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240326220055.png" alt="" /></p>
+<p>DBA的责任和义务</p>
+<ul>
+<li>熟悉相关的法规、政策，协助组织的决策者制定好相关的安全策略</li>
+<li>规划好安全控制保障措施，例如，系统安全级别、不同级别上的安全控制措施，对安全遭破坏的响应,</li>
+<li><strong>划分好数据的安全级别以及用户的安全级别</strong></li>
+<li>实施安全性控制：DBMS专门提供一个DBA账户，该账户是一个超级用户或称系统用户。DBA利用该账户的特权可以进行用户账户的创建以及权限授予和撤消、安全级别控制调整等</li>
+</ul>
+<h2 id="810-自主安全性机制10分55秒"><a class="header" href="#810-自主安全性机制10分55秒">810-自主安全性机制(10分55秒)</a></h2>
+<p>自主安全性机制</p>
+<ul>
+<li>通常情况下，自主安全性是通过授权机制来实现的。</li>
+<li>用户在使用数据库前必须由DBA处获得一个账户，并由DBA授予该账户一定的权限，该账户的用户依据其所拥有的权限对数据库进行操作；同时，该帐户用户也可将其所拥有的权利转授给其他的用户(账户)，由此实现权限在用户之间的传播和控制。</li>
+</ul>
+<p>授权者：决定用户权利的人</p>
+<p>授权：授予用户访问的权利</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240326220425.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240326220456.png" alt="" /></p>
+<h2 id="811-两种自主安全性控制5分22秒"><a class="header" href="#811-两种自主安全性控制5分22秒">811-两种自主安全性控制(5分22秒)</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240326220527.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240326220550.png" alt="" /></p>
+<h2 id="812-sql安全性控制6分44秒"><a class="header" href="#812-sql安全性控制6分44秒">812-SQL安全性控制(6分44秒)</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240326220618.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240326220702.png" alt="" /></p>
+<p>授予视图访问的权利，并不意味着授予基本表访问的权利(两个级别：基本关系级别和视图级别）</p>
+<p>授权者授予的权利必须是授权者已经拥有的权利</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240326220804.png" alt="" /></p>
+<h2 id="813-自主安全性控制的问题3分56秒"><a class="header" href="#813-自主安全性控制的问题3分56秒">813-自主安全性控制的问题(3分56秒)</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240326220832.png" alt="" /></p>
+<h2 id="814-强制安全性机制4分51秒"><a class="header" href="#814-强制安全性机制4分51秒">814-强制安全性机制(4分51秒)</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240326220900.png" alt="" /></p>
+<p>DBMS引入强制安全性机制,可以通过扩展关系模式来实现</p>
+<p>关系模式: R(A1: D1, A2: D2, ..., An:Dn)</p>
+<p>对属性和元组引入安全性分级特性或称分类特性</p>
+<p>R(A1: D1, C1, A2: D2, C2..., An:Dn, Cn, TC)</p>
+<p>其中 C1,C2,..,Cn分别为属性D1,D2,..,Dn的安全分类特性; TC为元组的分类特性</p>
+<p>这样,关系中的每个元组，都将扩展为带有安全分级的元组</p>
+<p>强制安全性机制使得关系形成为多级关系(不同级别用户所能看到的关系的子集)，也出现多重实例、多级关系完整性等许多新的问题或新的处理技巧,在使用中需注意仔细研究。</p>
+<h2 id="815-第8讲回顾本讲学习了什么-安全性回顾1分56秒"><a class="header" href="#815-第8讲回顾本讲学习了什么-安全性回顾1分56秒">815-第8讲回顾本讲学习了什么-安全性回顾(1分56秒)</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240326220942.png" alt="" /></p>
+<h2 id="第8讲模拟练习题"><a class="header" href="#第8讲模拟练习题">第8讲模拟练习题</a></h2>
+<p>在数据库的安全性控制中，授权的数据对象的范围越小，授权子系统就越灵活。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="第7讲-SQL语言之复杂查询与视图.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="第9讲-嵌入式SQL语言之基本技巧.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="第7讲-SQL语言之复杂查询与视图.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="第9讲-嵌入式SQL语言之基本技巧.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

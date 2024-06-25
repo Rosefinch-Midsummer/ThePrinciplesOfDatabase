@@ -1,0 +1,411 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>第22讲-数据库事务处理技术之并发控制 - 数据库原理</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="前言.html"><strong aria-hidden="true">1.</strong> 前言</a></li><li class="chapter-item expanded affix "><li class="part-title">HIT 数据库系统</li><li class="chapter-item expanded "><a href="课程概述.html"><strong aria-hidden="true">2.</strong> 课程概述</a></li><li class="chapter-item expanded "><a href="第1讲-初步认识数据库系统.html"><strong aria-hidden="true">3.</strong> 第1讲-初步认识数据库系统</a></li><li class="chapter-item expanded "><a href="第2讲-数据库系统的结构抽象与演变.html"><strong aria-hidden="true">4.</strong> 第2讲-数据库系统的结构抽象与演变</a></li><li class="chapter-item expanded "><a href="第3讲-关系模型之基本概念.html"><strong aria-hidden="true">5.</strong> 第3讲-关系模型之基本概念</a></li><li class="chapter-item expanded "><a href="第4讲-关系模型之关系代数（基于集合）.html"><strong aria-hidden="true">6.</strong> 第4讲-关系模型之关系代数（基于集合）</a></li><li class="chapter-item expanded "><a href="第5讲-关系模型之关系演算（基于逻辑）.html"><strong aria-hidden="true">7.</strong> 第5讲-关系模型之关系演算（基于逻辑）</a></li><li class="chapter-item expanded "><a href="第6讲-SQL语言之概述.html"><strong aria-hidden="true">8.</strong> 第6讲-SQL语言之概述</a></li><li class="chapter-item expanded "><a href="第7讲-SQL语言之复杂查询与视图.html"><strong aria-hidden="true">9.</strong> 第7讲-SQL语言之复杂查询与视图</a></li><li class="chapter-item expanded "><a href="第8讲-SQL语言与数据库完整性和安全性.html"><strong aria-hidden="true">10.</strong> 第8讲-SQL语言与数据库完整性和安全性</a></li><li class="chapter-item expanded "><a href="第9讲-嵌入式SQL语言之基本技巧.html"><strong aria-hidden="true">11.</strong> 第9讲-嵌入式SQL语言之基本技巧</a></li><li class="chapter-item expanded "><a href="第10讲-嵌入式SQL语言之动态SQL.html"><strong aria-hidden="true">12.</strong> 第10讲-嵌入式SQL语言之动态SQL</a></li><li class="chapter-item expanded "><a href="第11讲-数据建模：思想与方法(暨数据库设计之抽象与表达方法).html"><strong aria-hidden="true">13.</strong> 第11讲-数据建模：思想与方法(暨数据库设计之抽象与表达方法)</a></li><li class="chapter-item expanded "><a href="第12讲-数据建模：工程化方法及案例分析.html"><strong aria-hidden="true">14.</strong> 第12讲-数据建模：工程化方法及案例分析</a></li><li class="chapter-item expanded "><a href="第13讲-数据库设计过程.html"><strong aria-hidden="true">15.</strong> 第13讲-数据库设计过程</a></li><li class="chapter-item expanded "><a href="第14讲-函数依赖及其公理定理.html"><strong aria-hidden="true">16.</strong> 第14讲-函数依赖及其公理定理</a></li><li class="chapter-item expanded "><a href="第15讲-关系模式设计之规范形式.html"><strong aria-hidden="true">17.</strong> 第15讲-关系模式设计之规范形式</a></li><li class="chapter-item expanded "><a href="第16讲-模式分解存在什么问题.html"><strong aria-hidden="true">18.</strong> 第16讲-模式分解存在什么问题</a></li><li class="chapter-item expanded "><a href="第17讲-数据库物理存储.html"><strong aria-hidden="true">19.</strong> 第17讲-数据库物理存储</a></li><li class="chapter-item expanded "><a href="第18讲-数据库索引技术.html"><strong aria-hidden="true">20.</strong> 第18讲-数据库索引技术</a></li><li class="chapter-item expanded "><a href="第19讲-数据库查询实现算法之一趟扫描算法.html"><strong aria-hidden="true">21.</strong> 第19讲-数据库查询实现算法之一趟扫描算法</a></li><li class="chapter-item expanded "><a href="第20讲-数据库查询实现算法之两趟扫描算法.html"><strong aria-hidden="true">22.</strong> 第20讲-数据库查询实现算法之两趟扫描算法</a></li><li class="chapter-item expanded "><a href="第21讲-数据库查询优化技术.html"><strong aria-hidden="true">23.</strong> 第21讲-数据库查询优化技术</a></li><li class="chapter-item expanded "><a href="第22讲-数据库事务处理技术之并发控制.html" class="active"><strong aria-hidden="true">24.</strong> 第22讲-数据库事务处理技术之并发控制</a></li><li class="chapter-item expanded "><a href="第23讲-数据库事务处理技术之故障恢复.html"><strong aria-hidden="true">25.</strong> 第23讲-数据库事务处理技术之故障恢复</a></li><li class="chapter-item expanded affix "><li class="part-title">附加内容</li><li class="chapter-item expanded "><a href="存储过程.html"><strong aria-hidden="true">26.</strong> 存储过程</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">数据库原理</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="第22讲-数据库事务处理技术之并发控制"><a class="header" href="#第22讲-数据库事务处理技术之并发控制">第22讲-数据库事务处理技术之并发控制</a></h1>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419121424.png" alt="" /></p>
+<h2 id="2200-第22讲本讲学习什么1分45秒及第22讲教学课件"><a class="header" href="#2200-第22讲本讲学习什么1分45秒及第22讲教学课件">2200-第22讲本讲学习什么（1分45秒）及第22讲教学课件</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240418190201.png" alt="" /></p>
+<h2 id="2201-为什么要进行并发控制8分56秒"><a class="header" href="#2201-为什么要进行并发控制8分56秒">2201-为什么要进行并发控制（8分56秒）</a></h2>
+<p>为什么要进行并发控制？</p>
+<p>（1）数据库可能存在不一致</p>
+<p>如果大家同时买起点终点、日期、 车次相同的车票，会否买到座位相重复的车票？</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240418190342.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240418191114.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240418191153.png" alt="" /></p>
+<h2 id="2202-深入认识事务2个视频总计15分48秒"><a class="header" href="#2202-深入认识事务2个视频总计15分48秒">2202-深入认识事务（2个视频总计15分48秒）</a></h2>
+<h3 id="深入认识事务9分59秒"><a class="header" href="#深入认识事务9分59秒">深入认识事务（9分59秒）</a></h3>
+<p>（1）事务的概念</p>
+<p>事务（Transaction）是数据库管理系统提供的控制数据操作的一种手段，通过这一手段，应用程序员将一系列的数据库操作组合在一起作为一个整体进行操作和控制，以便数据库管理系统能够提供一致性状态转换的保证。</p>
+<p>（2）事务的宏观性和微观性</p>
+<p>事务的宏观性 (应用程序员看到的事务)：一个存取或改变数据库内容的程序的一次执行，或者说一条或多条SQL语句的一次执行被看作一个事务。</p>
+<p>事务一般是由应用程序员提出，因此有开始和结束，结束前需要提交或撤消。</p>
+<pre><code class="language-c">Begin Transaction
+exec sql ...
+exec sql ..
+exec sql commit work I exec sql rollback work
+End Transaction
+</code></pre>
+<p>在嵌入式SQL程序中，任何一条数据库操纵语句（如 exec sql select 等)都会引发一个新事务的开
+始，只要该程序当前没有正在处理的事务。而事务的结束是需要应用程序员通过 commit 或
+rollback 确认的。 因此 Begin Transaction 和 End Transaction两行语句是不需要的。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240418191639.png" alt="" /></p>
+<p>事务的微观性（DBMS看到的事务）：对数据库的一系列基本操作（读、写）的一个整体性执行。</p>
+<pre><code>T: read(A);
+A:= A - 5000;
+write(A);
+read(B);
+B:= B + 5000;
+write(B);
+</code></pre>
+<p>事务的并发执行：多个事务从宏观上看是并行执行的，但其微观上的基本操作（读、写）则可以是交叉执行的</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240418191800.png" alt="" /></p>
+<h3 id="事务acid特性5分49秒"><a class="header" href="#事务acid特性5分49秒">事务ACID特性（5分49秒）</a></h3>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240418191832.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240418191909.png" alt="" /></p>
+<h2 id="2203-事务调度与可串行性3个视频总计22分39秒"><a class="header" href="#2203-事务调度与可串行性3个视频总计22分39秒">2203-事务调度与可串行性（3个视频总计22分39秒）</a></h2>
+<h3 id="事务调度与可串行性8分45秒"><a class="header" href="#事务调度与可串行性8分45秒">事务调度与可串行性（8分45秒）</a></h3>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419113805.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419114025.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419114144.png" alt="" /></p>
+<p>注意：这里应该是并发调度，不是并行调度！</p>
+<p>（2）一种简单的事务调度的标记模型</p>
+<p>表达事务调度的一种模型</p>
+<p>r_T(A): 事务T读A。 W_T(A) : 事务T写A</p>
+<p>T1: r1(A); W1(A); r1(B); w1(B)</p>
+<p>T2: r2(A); W2(A); r2(B); W2(B)</p>
+<h3 id="冲突可串行性7分44秒"><a class="header" href="#冲突可串行性7分44秒">冲突可串行性（7分44秒）</a></h3>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419114639.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419115100.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419115141.png" alt="" /></p>
+<h3 id="冲突可串行性判别算法6分10秒"><a class="header" href="#冲突可串行性判别算法6分10秒">冲突可串行性判别算法（6分10秒）</a></h3>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419115213.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419115359.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419115456.png" alt="" /></p>
+<h2 id="2204-基于锁的并发控制3个视频总计30分57秒"><a class="header" href="#2204-基于锁的并发控制3个视频总计30分57秒">2204-基于锁的并发控制（3个视频总计30分57秒）</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419115532.png" alt="" /></p>
+<h3 id="什么是锁6分14秒"><a class="header" href="#什么是锁6分14秒">什么是锁（6分14秒）</a></h3>
+<p>基于封锁的并发控制方法</p>
+<p>（2）什么是锁?</p>
+<p>"锁" 是控制并发的一种手段</p>
+<p>每一数据元素都有唯一的锁</p>
+<p>每一事务读写数据元素前，要获得锁</p>
+<p>如果被其他事务持有该元素的锁，则要等待。</p>
+<p>事务处理完成后要释放锁</p>
+<p>L_i(A): 事务T_i对数据元素A加锁</p>
+<p>U_i(A): 事务T_i对数据元素A解锁</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419115748.png" alt="" /></p>
+<p>调度器可利用锁来保证冲突可串行性</p>
+<p>锁本身并不能保证冲突可串行性。</p>
+<p>锁为调度提供了控制的手段。但如何用锁，仍需说明。---不同的协议</p>
+<h3 id="封锁协议要考虑什么13分57秒"><a class="header" href="#封锁协议要考虑什么13分57秒">封锁协议要考虑什么（13分57秒）</a></h3>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419115911.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419115939.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419120004.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419120023.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419120043.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419120108.png" alt="" /></p>
+<h3 id="两段封锁协议10分46秒"><a class="header" href="#两段封锁协议10分46秒">两段封锁协议（10分46秒）</a></h3>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419120144.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419120208.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419120232.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419120250.png" alt="" /></p>
+<h2 id="2205-基于时间戳的并发控制2个视频19分33秒"><a class="header" href="#2205-基于时间戳的并发控制2个视频19分33秒">2205-基于时间戳的并发控制（2个视频19分33秒）</a></h2>
+<h3 id="基于时间戳的并发控制10分40秒"><a class="header" href="#基于时间戳的并发控制10分40秒">基于时间戳的并发控制（10分40秒）</a></h3>
+<p>（2）什么是时间戳?</p>
+<p>时间戳(TIMESTAMP)</p>
+<p>一种基于时间的标志，将某一时刻转换成的一个数值。</p>
+<p>时间戳具有唯一性和递增性。</p>
+<p>事务的时间戳</p>
+<p>事务T启动时，系统将该时刻赋予T，为T的时间戳</p>
+<p>时间戳可以表征一系列事务执行的先后次序：时间戳小的事务先执行，时间戳大的事务后执行。</p>
+<p>利用时间戳，可以不用锁来进行并发控制</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419120442.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419120506.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419120653.png" alt="" /></p>
+<p>核心思想：先执行的先操作，后执行的后操作，这样没有冲突</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419120739.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419120816.png" alt="" /></p>
+<h3 id="基于时间戳的另一种调度8分53秒"><a class="header" href="#基于时间戳的另一种调度8分53秒">基于时间戳的另一种调度（8分53秒）</a></h3>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419120846.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419120906.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419120924.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419120947.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419121005.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419121029.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419121049.png" alt="" /></p>
+<h2 id="2206-基于有效性确认的并发控制14分23秒"><a class="header" href="#2206-基于有效性确认的并发控制14分23秒">2206-基于有效性确认的并发控制（14分23秒）</a></h2>
+<p>能否进行批量性的冲突检测？</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419121146.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419121214.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419121229.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419121245.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419121307.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419121341.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419121402.png" alt="" /></p>
+<h2 id="第22讲模拟练习题"><a class="header" href="#第22讲模拟练习题">第22讲模拟练习题</a></h2>
+<p>13、T1，T2，T3三个事务，记wi(A)为事务Ti写数据对象A，ri(A)为事务Ti读数据对象A，一个调度S为 “<strong>w1(Y); w2(Y); w2(X); w1(X); w3(X);</strong>”，问该调度是S不是冲突可串行化调度，但却是可串行化调度，是正确的并行调度。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240419114025.png" alt="" /></p>
+<p>要判断给定的调度S是否是正确的并发调度以及是否是可串行调度，我们需要考虑事务之间的数据依赖关系和执行顺序。</p>
+<p>首先，让我们逐步分析该调度：</p>
+<ol>
+<li>T1写入了数据对象Y（w1(Y)）。</li>
+<li>T2写入了数据对象Y（w2(Y)）。</li>
+<li>T2写入了数据对象X（w2(X)）。</li>
+<li>T1写入了数据对象X（w1(X)）。</li>
+<li>T3读取了数据对象X（r3(X)）。</li>
+</ol>
+<p>现在，让我们来分析一下：</p>
+<p><strong>正确的并发调度</strong>：</p>
+<ul>
+<li>如果在该并发调度中，没有出现任何事务的读写冲突、写写冲突和不可重复读现象，则可以认为是一个正确的并发调度。</li>
+</ul>
+<p>在给定的调度中，不存在两个事务同时访问相同的数据对象的情况，因此没有出现读写冲突或写写冲突。因此，这是一个正确的并发调度。</p>
+<p><strong>可串行调度</strong>：</p>
+<ul>
+<li>如果该并发调度的执行结果与某个串行调度的执行结果相同，则称该并发调度是可串行的。</li>
+</ul>
+<p>一个串行调度可以是w1(Y); w2(Y); w2(X); w1(X); w3(X)。在这个串行调度中，T1和T2的写操作按照其在调度S中的顺序执行，然后T3读取了X。调度S的执行结果与这个串行调度的执行结果相同，因此调度S是可串行的。</p>
+<p>综上所述，给定的调度S是一个正确的并发调度，并且是可串行的。</p>
+<p>这个调度S为：“<strong>w1(Y); w2(Y); w2(X); w1(X); w3(X);</strong>”</p>
+<p>首先，我们来看这个调度是否是正确的并发调度。一个正确的并发调度必须满足以下两个条件：</p>
+<ol>
+<li>
+<p><strong>事务操作的顺序不变</strong>：在调度S中，事务的操作顺序是不变的，即按照w1(Y), w2(Y), w2(X), w1(X), w3(X)的顺序执行。</p>
+</li>
+<li>
+<p><strong>事务操作必须保证数据一致性</strong>：对于每个数据对象，如果事务Ti写入了一个数据项后，再有其他事务Tj读取或者写入该数据项时，Tj必须读取Ti的写入值。</p>
+</li>
+</ol>
+<p>对于第一个条件，调度S满足，因为事务操作的顺序没有改变。</p>
+<p>对于第二个条件，我们来逐步分析：</p>
+<ol>
+<li>w1(Y)：事务T1写入了数据对象Y。</li>
+<li>w2(Y)：事务T2写入了数据对象Y。</li>
+<li>w2(X)：事务T2写入了数据对象X。</li>
+<li>w1(X)：事务T1写入了数据对象X。</li>
+<li>w3(X)：事务T3写入了数据对象X。</li>
+</ol>
+<p>接下来判断这个调度是否是可串行调度。一个可串行调度是指，存在一个等价的串行调度，该串行调度与原调度S的操作序列相同。因为可串行调度是串行调度的特例，因此我们只需要验证是否存在一个串行调度等价于原调度S即可。</p>
+<p>根据原调度S的操作序列，可以构建一个串行调度为：T1 -&gt; T2 -&gt; T3，即按照事务T1、T2、T3的顺序执行操作。</p>
+<p>26、关于基于时间戳的并发控制方法(简称TS方法)和基于有效性确认的并发控制方法(简称VA方法)的异同点，下列说法不正确的是___________。</p>
+<ul>
+<li>
+<p>A.TS方法和VA方法都是利用时间戳表征事务的启动时刻，表征事务的执行次序</p>
+</li>
+<li>
+<p>B.TS方法和VA 方法都是为每一数据库元素保存一个读时间戳和写时间戳</p>
+</li>
+<li>
+<p>C.TS方法是比较事务的时间戳与数据库元素的时间戳来判断是否有冲突，而VA方法是通过比较两个事务的读写数据集合是否有交集来判断是否有冲突</p>
+</li>
+<li>
+<p>D.TS方法和VA方法都是以撤销事务并重启事务来解决事务之间的冲突</p>
+</li>
+</ul>
+<p>正确答案：B你选对了</p>
+<p>解析：选项A、C和D的说法都是正确的，但选项B的说法是不正确的，TS方法是为每一数据库元素保存一个读时间戳和写时间戳，以便于事务时间戳与数据库元素的时间戳进行比较判断冲突；而VA方法则是为每一个事务保存一个读数据集合和一个写数据集合，以便于数据集合之间的比较判断冲突，故选项B的说法是不正确的。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="第21讲-数据库查询优化技术.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="第23讲-数据库事务处理技术之故障恢复.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="第21讲-数据库查询优化技术.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="第23讲-数据库事务处理技术之故障恢复.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

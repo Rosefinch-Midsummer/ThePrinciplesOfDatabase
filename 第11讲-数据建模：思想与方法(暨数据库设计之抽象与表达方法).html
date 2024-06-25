@@ -1,0 +1,344 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>第11讲-数据建模：思想与方法(暨数据库设计之抽象与表达方法) - 数据库原理</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="前言.html"><strong aria-hidden="true">1.</strong> 前言</a></li><li class="chapter-item expanded affix "><li class="part-title">HIT 数据库系统</li><li class="chapter-item expanded "><a href="课程概述.html"><strong aria-hidden="true">2.</strong> 课程概述</a></li><li class="chapter-item expanded "><a href="第1讲-初步认识数据库系统.html"><strong aria-hidden="true">3.</strong> 第1讲-初步认识数据库系统</a></li><li class="chapter-item expanded "><a href="第2讲-数据库系统的结构抽象与演变.html"><strong aria-hidden="true">4.</strong> 第2讲-数据库系统的结构抽象与演变</a></li><li class="chapter-item expanded "><a href="第3讲-关系模型之基本概念.html"><strong aria-hidden="true">5.</strong> 第3讲-关系模型之基本概念</a></li><li class="chapter-item expanded "><a href="第4讲-关系模型之关系代数（基于集合）.html"><strong aria-hidden="true">6.</strong> 第4讲-关系模型之关系代数（基于集合）</a></li><li class="chapter-item expanded "><a href="第5讲-关系模型之关系演算（基于逻辑）.html"><strong aria-hidden="true">7.</strong> 第5讲-关系模型之关系演算（基于逻辑）</a></li><li class="chapter-item expanded "><a href="第6讲-SQL语言之概述.html"><strong aria-hidden="true">8.</strong> 第6讲-SQL语言之概述</a></li><li class="chapter-item expanded "><a href="第7讲-SQL语言之复杂查询与视图.html"><strong aria-hidden="true">9.</strong> 第7讲-SQL语言之复杂查询与视图</a></li><li class="chapter-item expanded "><a href="第8讲-SQL语言与数据库完整性和安全性.html"><strong aria-hidden="true">10.</strong> 第8讲-SQL语言与数据库完整性和安全性</a></li><li class="chapter-item expanded "><a href="第9讲-嵌入式SQL语言之基本技巧.html"><strong aria-hidden="true">11.</strong> 第9讲-嵌入式SQL语言之基本技巧</a></li><li class="chapter-item expanded "><a href="第10讲-嵌入式SQL语言之动态SQL.html"><strong aria-hidden="true">12.</strong> 第10讲-嵌入式SQL语言之动态SQL</a></li><li class="chapter-item expanded "><a href="第11讲-数据建模：思想与方法(暨数据库设计之抽象与表达方法).html" class="active"><strong aria-hidden="true">13.</strong> 第11讲-数据建模：思想与方法(暨数据库设计之抽象与表达方法)</a></li><li class="chapter-item expanded "><a href="第12讲-数据建模：工程化方法及案例分析.html"><strong aria-hidden="true">14.</strong> 第12讲-数据建模：工程化方法及案例分析</a></li><li class="chapter-item expanded "><a href="第13讲-数据库设计过程.html"><strong aria-hidden="true">15.</strong> 第13讲-数据库设计过程</a></li><li class="chapter-item expanded "><a href="第14讲-函数依赖及其公理定理.html"><strong aria-hidden="true">16.</strong> 第14讲-函数依赖及其公理定理</a></li><li class="chapter-item expanded "><a href="第15讲-关系模式设计之规范形式.html"><strong aria-hidden="true">17.</strong> 第15讲-关系模式设计之规范形式</a></li><li class="chapter-item expanded "><a href="第16讲-模式分解存在什么问题.html"><strong aria-hidden="true">18.</strong> 第16讲-模式分解存在什么问题</a></li><li class="chapter-item expanded "><a href="第17讲-数据库物理存储.html"><strong aria-hidden="true">19.</strong> 第17讲-数据库物理存储</a></li><li class="chapter-item expanded "><a href="第18讲-数据库索引技术.html"><strong aria-hidden="true">20.</strong> 第18讲-数据库索引技术</a></li><li class="chapter-item expanded "><a href="第19讲-数据库查询实现算法之一趟扫描算法.html"><strong aria-hidden="true">21.</strong> 第19讲-数据库查询实现算法之一趟扫描算法</a></li><li class="chapter-item expanded "><a href="第20讲-数据库查询实现算法之两趟扫描算法.html"><strong aria-hidden="true">22.</strong> 第20讲-数据库查询实现算法之两趟扫描算法</a></li><li class="chapter-item expanded "><a href="第21讲-数据库查询优化技术.html"><strong aria-hidden="true">23.</strong> 第21讲-数据库查询优化技术</a></li><li class="chapter-item expanded "><a href="第22讲-数据库事务处理技术之并发控制.html"><strong aria-hidden="true">24.</strong> 第22讲-数据库事务处理技术之并发控制</a></li><li class="chapter-item expanded "><a href="第23讲-数据库事务处理技术之故障恢复.html"><strong aria-hidden="true">25.</strong> 第23讲-数据库事务处理技术之故障恢复</a></li><li class="chapter-item expanded affix "><li class="part-title">附加内容</li><li class="chapter-item expanded "><a href="存储过程.html"><strong aria-hidden="true">26.</strong> 存储过程</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">数据库原理</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="第1讲总第11讲数据建模思想与方法暨数据库设计之抽象与表达方法"><a class="header" href="#第1讲总第11讲数据建模思想与方法暨数据库设计之抽象与表达方法">第1讲（总第11讲）数据建模：思想与方法(暨数据库设计之抽象与表达方法)</a></h1>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329154405.png" alt="" /></p>
+<h2 id="1100-本讲学习什么4分33秒及第11讲教学课件"><a class="header" href="#1100-本讲学习什么4分33秒及第11讲教学课件">1100-本讲学习什么（4分33秒）及第11讲教学课件</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329133101.png" alt="" /></p>
+<p>“数据建模与数据库设计”内容学习的目标？</p>
+<ul>
+<li>理解数据建模与数据库设计</li>
+<li>扎实地理解并掌握E-R模型/IDEF1X模型：数据建模与数据库设计的重要工具</li>
+</ul>
+<p>能够绘制E-R图/IDEF1X图而且绘制得正确</p>
+<ul>
+<li>能够用E-R/IDEF1X模型准确理解现实世界并进行数据库设计</li>
+</ul>
+<p>理解现实世界并进行抽象的能力，理解并抽象得正确</p>
+<ul>
+<li>能够分析数据库设计的正确性</li>
+</ul>
+<h2 id="1101-为什么要数据建模与数据库设计5分21秒"><a class="header" href="#1101-为什么要数据建模与数据库设计5分21秒">1101-为什么要数据建模与数据库设计（5分21秒）</a></h2>
+<p>需求的理解，简单来讲，包括数据需求的理解和处理规则需求的理解.....</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329133637.png" alt="" /></p>
+<h2 id="1102-数据模型与概念模型的概念4分44秒"><a class="header" href="#1102-数据模型与概念模型的概念4分44秒">1102-数据模型与概念模型的概念（4分44秒）</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329133537.png" alt="" /></p>
+<h2 id="1103-关于抽象的八个字2分10秒"><a class="header" href="#1103-关于抽象的八个字2分10秒">1103-关于抽象的八个字（2分10秒）</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329133213.png" alt="" /></p>
+<h2 id="1104-什么是e-r模型2分21秒"><a class="header" href="#1104-什么是e-r模型2分21秒">1104-什么是E-R模型（2分21秒）</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329133901.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329133926.png" alt="" /></p>
+<h2 id="1105-实体与实例6分48秒"><a class="header" href="#1105-实体与实例6分48秒">1105-实体与实例（6分48秒）</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329140153.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329140216.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329140239.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329140302.png" alt="" /></p>
+<h2 id="1106-联系与联系的元数4分39秒"><a class="header" href="#1106-联系与联系的元数4分39秒">1106-联系与联系的元数（4分39秒）</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329140339.png" alt="" /></p>
+<p>参与发生联系的实体的数目，称为联系的度或元</p>
+<p>联系有一元联系、二元联系和多元联系</p>
+<p>联系是需要存储和处理的</p>
+<p>实体是相对稳定的，但是联系是多样化的</p>
+<p>一元联系：同一个实体中的实例之间的联系</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329140934.png" alt="" /></p>
+<h2 id="1107-联系与联系的基数6分29秒"><a class="header" href="#1107-联系与联系的基数6分29秒">1107-联系与联系的基数（6分29秒）</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329141015.png" alt="" /></p>
+<p>联系的基数（Cardinalities）：实体实例之间的联系的数量，即一个实体的实例通过一个联系能与另一实体中相关联的实例的数目</p>
+<p>常见的映射基数如上，有一对一的（1:1），一对多的（1:m），多对多的（m:n）几种情况</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329141633.png" alt="" /></p>
+<h2 id="1108-chen方法表达e-r模型12分49秒"><a class="header" href="#1108-chen方法表达e-r模型12分49秒">1108-Chen方法表达E-R模型（12分49秒）</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329141807.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329143708.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329143804.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329143842.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329143928.png" alt="" /></p>
+<h2 id="1109-chen方法建模案例-物资管理系统数据建模8分20秒"><a class="header" href="#1109-chen方法建模案例-物资管理系统数据建模8分20秒">1109-Chen方法建模案例-物资管理系统数据建模（8分20秒）</a></h2>
+<p>Step1理解需求，寻找实体</p>
+<p>E-R图建模首先要找出问题领域的实体，即找出有哪些类/实体</p>
+<p>能够用一个个、一件件、一串串等重叠量词形容的，而不是一个、一件...</p>
+<p>要覆盖需求涉及的可独立管理的每一类事物</p>
+<p>Step2用属性刻画每一个实体，至少要给出一个重要属性</p>
+<p>Step3确定每一个实体的关键字/码，关键字属性是必须要标记清晰的</p>
+<p>Step4数据建模的重点是分析实体之间的联系</p>
+<p>Step5检查是否覆盖了需求</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329144927.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329144946.png" alt="" /></p>
+<h2 id="1110-crows-foot方法表达e-r模型8分40秒"><a class="header" href="#1110-crows-foot方法表达e-r模型8分40秒">1110-Crow's Foot方法表达E-R模型（8分40秒）</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329145250.png" alt="" /></p>
+<p>联系：菱形框表示，也可以将菱形框省略而直接以联系名来替代</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329145345.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329145421.png" alt="" /></p>
+<h2 id="1111-crows-foot方法建模案例-物资管理系统数据建模4分55秒"><a class="header" href="#1111-crows-foot方法建模案例-物资管理系统数据建模4分55秒">1111-Crow's Foot方法建模案例-物资管理系统数据建模（4分55秒）</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329145516.png" alt="" /></p>
+<h2 id="1112-型与值和三个世界7分54秒"><a class="header" href="#1112-型与值和三个世界7分54秒">1112-型与值和三个世界（7分54秒）</a></h2>
+<p>信息</p>
+<ul>
+<li>信息是现实世界中事物在人们头脑中的一种反映</li>
+<li>信息可以准确地反映现实世界中事物（描述）</li>
+<li>也可以通过对现实进行抽象，形成信息（抽象）</li>
+</ul>
+<p>数据库设计往往因为忽视了信息（之间联系）的细致分析而造成设计失误</p>
+<p>数据库设计能力的高低往住体现在信息（及其联系）的正确分析上，体现在理解现实世界能力的高低</p>
+<p>三个世界与多层（级）抽象</p>
+<p>现实世界==&gt;（描述、抽象为）信息世界==&gt;（描述、抽象为）计算机世界</p>
+<p>现实（客观存在）==&gt;抽象/描述（概念/观念）==&gt;计算机中（用计算机实现）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329151759.png" alt="" /></p>
+<p>类似的概念：</p>
+<ul>
+<li>“型”（Type）与值（Value）</li>
+<li>”模式（Schema）与“数据（Data）“</li>
+<li>“数据模型（DataModel）“与“模式（Schema）”</li>
+<li>”模式（Schema）”与“实例（Instance）”</li>
+<li>“类（Class）”与”对象（Object）“</li>
+<li>”实体（Entity）”与“实例（Instance）”</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329152032.png" alt="" /></p>
+<h2 id="1113-数据模型与两种抽象层次8分06秒"><a class="header" href="#1113-数据模型与两种抽象层次8分06秒">1113-数据模型与两种抽象层次（8分06秒）</a></h2>
+<p>数据模型</p>
+<ul>
+<li>不同范围的人对现实世界中事物的描述和抽象可能是不同的</li>
+<li>现实的抽象与描述需要遵循统一的数据模型：统一的概念与统一的表达方法</li>
+<li>数据模型是一组相互关联且已严格定义的概态集合，是用于刻画或描述现实世界、信息世界或计算机世界的模型</li>
+<li>用统一的模型建模也是计算机学科学生所无为擅长的能力</li>
+</ul>
+<p>统一是为了信息交流、信息共享</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329133537.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329154214.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329154239.png" alt="" /></p>
+<h2 id="1114-再看抽象层次6分39秒"><a class="header" href="#1114-再看抽象层次6分39秒">1114-再看抽象层次（6分39秒）</a></h2>
+<p>建模的不同层次：模型与元模型，模型（型）与实例（值）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Rosefinch-Midsummer/MyImagesHost02/img/20240329154338.png" alt="" /></p>
+<h2 id="第1讲总第11讲模拟题"><a class="header" href="#第1讲总第11讲模拟题">第1讲（总第11讲）模拟题</a></h2>
+<p>实体虽然是指一个个可相互区分的个体，但E-R图建模是要寻找这些个体的“型”，而非这些个体本身；</p>
+<p>实体是可以用重叠量词来形容的，在问题域中不能用重叠量词形容的则不是实体；</p>
+<p>联系是指一个实体的实例与另一个实体的实例之间可能存在的某种联系；</p>
+<p>在发现联系的过程中重点是联系的基数的判定即一个实体实例能够和另外实体的多少个实例发生联系，因为这将影响数据库设计——如何处理联系。</p>
+<p>参与发生联系的实体的数目，称为联系的度或元。联系有一元联系、二元联系和多元联系</p>
+<p>模型是依据元模型中的抽象概念及其关系，对现实世界进行理解，获得具体概念及其具体关系所形成的；</p>
+<p>元模型是对模型的抽象，而模型是对现实世界的抽象；</p>
+<p>同一元模型，可以产生不同的模型；而同一现实世界，也可以产生不同的模型。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="第10讲-嵌入式SQL语言之动态SQL.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="第12讲-数据建模：工程化方法及案例分析.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="第10讲-嵌入式SQL语言之动态SQL.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="第12讲-数据建模：工程化方法及案例分析.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
